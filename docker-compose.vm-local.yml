@@ -31,6 +31,20 @@ services:
     networks:
       - pos-network
 
+  toolbox:
+    image: node:22-alpine
+    container_name: ziiipos-toolbox
+    profiles: ["tools"]
+    working_dir: /workspace
+    env_file:
+      - .env.vm-local
+    environment:
+      SUPABASE_URL_INTERNAL: http://kong:8000
+    volumes:
+      - .:/workspace
+    networks:
+      - pos-network
+
   db:
     image: supabase/postgres:15.8.1.060
     container_name: supabase-db
