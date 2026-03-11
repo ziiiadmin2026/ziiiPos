@@ -2,6 +2,7 @@ import { BriefcaseBusiness, ChefHat, ShieldCheck, UsersRound, WalletCards } from
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/auth/login-form";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 type LoginPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -36,6 +37,17 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     redirect("/");
   }
 
+  const admin = createAdminClient();
+  const { data: org } = await admin
+    .from("organizations")
+    .select("brand_name, name, logo_url")
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .single();
+
+  const brandName = org?.brand_name || org?.name || "ZiiiPos";
+  const logoUrl = org?.logo_url;
+
   const errorParam = resolvedParams.error;
   const error = Array.isArray(errorParam) ? errorParam[0] : errorParam;
 
@@ -46,12 +58,20 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <div className="flex flex-col gap-0 lg:grid lg:grid-cols-[0.88fr_1.12fr]">
             <div className="border-b border-stone-200 p-6 lg:border-b-0 lg:border-r lg:p-8">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#211d18] text-cloud">
-                  <ChefHat className="h-6 w-6" />
-                </div>
+                {logoUrl ? (
+                  <img
+                    src={logoUrl}
+                    alt={brandName}
+                    className="h-12 w-auto object-contain"
+                  />
+                ) : (
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#211d18] text-cloud">
+                    <ChefHat className="h-6 w-6" />
+                  </div>
+                )}
                 <div>
                   <p className="text-xs uppercase tracking-[0.28em] text-ink/42">Restaurant OS</p>
-                  <h1 className="font-semibold">ZiiiPos</h1>
+                  <h1 className="font-semibold">{brandName}</h1>
                 </div>
               </div>
 
