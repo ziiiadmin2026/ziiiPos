@@ -41,7 +41,11 @@ services:
       - ./supabase/migrations:/pos-bootstrap/migrations
       - ./supabase/seed:/pos-bootstrap/seed
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${SUPABASE_DB_ADMIN_USER:-supabase_admin} -d postgres"]
+      test:
+        [
+          "CMD-SHELL",
+          "psql -U ${SUPABASE_DB_ADMIN_USER:-supabase_admin} -d postgres -tAc \"select 1 from pg_namespace where nspname = 'auth'\" | grep -q 1"
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
