@@ -31,6 +31,14 @@ Incluye tres perfiles de despliegue:
 3. Levanta la aplicacion con `npm run dev` o usa Docker Compose.
 4. Inicializa la base con el SQL de `supabase/migrations/20260310_0001_init_pos.sql`.
 
+## Bootstrap del primer admin
+
+Una vez levantado Supabase self-hosted, crea el primer usuario operativo real con:
+
+`npm run bootstrap:admin -- --env-file .env.vm-local --email admin@ziiipos.com --password "TuPasswordSegura123!" --full-name "Admin ZiiiPos" --role admin`
+
+Esto crea o actualiza el usuario en Supabase Auth y lo enlaza con `public.app_users` para que el login y los permisos por modulo funcionen.
+
 ## Docker
 
 `docker compose up --build`

@@ -5,6 +5,7 @@ import { kitchenQueue, metrics, stockAlerts, topProducts } from "@/lib/mock-data
 export default function Home() {
   return (
     <AppShell
+      module="dashboard"
       title="Dashboard operativo"
       subtitle="Vista unificada de ventas, cocina, inventario y caja para decisiones rapidas durante el servicio."
     >

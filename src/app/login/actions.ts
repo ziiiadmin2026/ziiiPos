@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getDefaultRouteForRole } from "@/lib/auth/permissions";
 import { createClient } from "@/lib/supabase/server";
 
 function getStringValue(formData: FormData, key: string) {
@@ -18,14 +20,25 @@ export async function loginAction(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     redirect(`/login?error=${encodeURIComponent("No se pudo iniciar sesion. Verifica tus credenciales.")}`);
   }
 
+  const admin = createAdminClient();
+  const { data: appUser } = await admin
+    .from("app_users")
+    .select("role, is_active")
+    .eq("auth_user_id", data.user.id)
+    .maybeSingle<{ role: Parameters<typeof getDefaultRouteForRole>[0]; is_active: boolean }>();
+
+  if (!appUser?.is_active) {
+    redirect("/unauthorized?reason=perfil");
+  }
+
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect(getDefaultRouteForRole(appUser.role));
 }
 
 export async function logoutAction() {

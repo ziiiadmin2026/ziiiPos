@@ -1,34 +1,27 @@
 import type { Route } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ChartNoAxesCombined, ChefHat, LayoutDashboard, WalletCards } from "lucide-react";
 import { logoutAction } from "@/app/login/actions";
-import { createClient } from "@/lib/supabase/server";
+import { canAccessModule, type AppModule, requireAppAccess } from "@/lib/auth/permissions";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/pos", label: "POS", icon: WalletCards },
-  { href: "/backoffice", label: "Backoffice", icon: ChartNoAxesCombined }
-] satisfies Array<{ href: Route; label: string; icon: typeof LayoutDashboard }>;
+  { href: "/", label: "Dashboard", icon: LayoutDashboard, module: "dashboard" },
+  { href: "/pos", label: "POS", icon: WalletCards, module: "pos" },
+  { href: "/backoffice", label: "Backoffice", icon: ChartNoAxesCombined, module: "backoffice" }
+] satisfies Array<{ href: Route; label: string; icon: typeof LayoutDashboard; module: AppModule }>;
 
 type AppShellProps = {
   title: string;
   subtitle: string;
+  module: AppModule;
   children: React.ReactNode;
 };
 
-export async function AppShell({ title, subtitle, children }: AppShellProps) {
-  const supabase = await createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const displayName = user.user_metadata.full_name || user.email || "Operacion";
+export async function AppShell({ title, subtitle, module, children }: AppShellProps) {
+  const { authUser, appUser } = await requireAppAccess(module);
+  const displayName = appUser.full_name || authUser.user_metadata.full_name || authUser.email || "Operacion";
+  const visibleNavItems = navItems.filter((item) => canAccessModule(appUser.role, item.module as AppModule));
 
   return (
     <div className="min-h-screen bg-canvas bg-grain text-ink">
@@ -45,7 +38,7 @@ export async function AppShell({ title, subtitle, children }: AppShellProps) {
           </div>
 
           <nav className="mt-10 space-y-3">
-            {navItems.map(({ href, label, icon: Icon }) => (
+            {visibleNavItems.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
@@ -63,7 +56,10 @@ export async function AppShell({ title, subtitle, children }: AppShellProps) {
           <div className="mt-10 rounded-[28px] border border-ink/10 bg-white/80 p-5">
             <p className="text-xs uppercase tracking-[0.28em] text-ink/45">Sesion activa</p>
             <p className="mt-3 text-lg font-semibold">{displayName}</p>
-            <p className="mt-1 break-all text-sm text-ink/55">{user.email}</p>
+            <p className="mt-1 break-all text-sm text-ink/55">{authUser.email}</p>
+            <p className="mt-3 inline-flex rounded-full bg-canvas px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
+              {appUser.role}
+            </p>
             <form action={logoutAction} className="mt-5">
               <button className="inline-flex h-11 w-full items-center justify-center rounded-2xl border border-ink/10 bg-canvas px-4 text-sm font-medium transition hover:border-ink/20 hover:bg-white">
                 Cerrar sesion

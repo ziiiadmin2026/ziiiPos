@@ -15,6 +15,7 @@ const inventoryRows = [
 export default function BackofficePage() {
   return (
     <AppShell
+      module="backoffice"
       title="Backoffice y costeo"
       subtitle="Control de ingredientes, compras, recetas y movimientos para mantener margen y stock bajo supervision constante."
     >
