@@ -2,8 +2,10 @@
 -- ORGANIZATION & BRANCH
 -- ─────────────────────────────────────────────────────────
 insert into public.organizations (id, name, legal_name, currency_code, timezone)
-values ('11111111-1111-1111-1111-111111111111', 'ZiiiPos Restaurants', 'ZiiiPos Restaurants SAS', 'COP', 'America/Bogota')
-on conflict (id) do nothing;
+values ('11111111-1111-1111-1111-111111111111', 'ZiiiPos', 'ZiiiPos', 'MXN', 'America/Mexico_City')
+on conflict (id) do update set
+  name       = excluded.name,
+  legal_name = excluded.legal_name;
 
 insert into public.branches (id, organization_id, name, code, address)
 values ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'Polanco', 'POL', 'Masaryk 100, CDMX')
