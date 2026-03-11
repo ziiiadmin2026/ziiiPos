@@ -14,7 +14,13 @@ export default async function PosPage() {
       title="Punto de venta tactil"
       subtitle="Categorias grandes, productos rapidos y control de mesas para una operacion fluida en salon, pickup y delivery."
     >
-      <PosBoard categories={categories} products={products} tables={tables} />
+      <PosBoard 
+        categories={categories} 
+        products={products} 
+        tables={tables}
+        branchId={branchId}
+        userId={appUser.id}
+      />
     </AppShell>
   );
 }

@@ -1,105 +1,63 @@
 import { AppShell } from "@/components/layout/app-shell";
+import { requireAppAccess } from "@/lib/auth/permissions";
 import Link from "next/link";
+import { Building2, LayoutGrid, Users, FileUp } from "lucide-react";
+import type { Route } from "next";
 
-const recipeRows = [
-  { product: "Hamburguesa ZiiiPos", cost: "$78.40", price: "$219.00", margin: "64.2%" },
-  { product: "Ribeye 350g", cost: "$224.50", price: "$448.00", margin: "49.9%" },
-  { product: "Carajillo", cost: "$31.20", price: "$145.00", margin: "78.5%" }
+const moduleCards = [
+  {
+    href: "/backoffice/branches" as Route,
+    title: "Sedes y locales",
+    description: "Configura tus ubicaciones de operacion",
+    icon: Building2,
+    color: "bg-forest"
+  },
+  {
+    href: "/backoffice/tables" as Route,
+    title: "Gestion de mesas",
+    description: "Organiza areas de servicio y distribucion",
+    icon: LayoutGrid,
+    color: "bg-ember"
+  },
+  {
+    href: "/backoffice/users" as Route,
+    title: "Usuarios y permisos",
+    description: "Administra el equipo y roles",
+    icon: Users,
+    color: "bg-ink"
+  },
+  {
+    href: "/backoffice/import" as Route,
+    title: "Importar menu",
+    description: "Carga productos desde archivo",
+    icon: FileUp,
+    color: "bg-amber-600"
+  }
 ];
 
-const inventoryRows = [
-  { movement: "Compra proveedor", ingredient: "Carne molida premium", qty: "+12 kg", ref: "OC-2026-014" },
-  { movement: "Merma", ingredient: "Pan brioche", qty: "-6 pzas", ref: "AJ-2026-003" },
-  { movement: "Consumo venta", ingredient: "Cafe espresso", qty: "-0.58 kg", ref: "VTA-1026" }
-];
+export default async function BackofficePage() {
+  await requireAppAccess("backoffice");
 
-export default function BackofficePage() {
   return (
     <AppShell
       module="backoffice"
-      title="Backoffice y costeo"
-      subtitle="Control de ingredientes, compras, recetas y movimientos para mantener margen y stock bajo supervision constante."
+      title="Backoffice"
+      subtitle="Panel de administracion y configuracion del sistema. Gestiona sedes, usuarios, mesas y productos."
     >
-      <div className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <section className="rounded-[30px] border border-ink/10 bg-gradient-to-r from-ink to-stone-800 p-6 text-cloud shadow-sm">
-            <p className="text-xs uppercase tracking-[0.28em] text-cloud/55">Administracion</p>
-            <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <h3 className="text-xl font-semibold">Gestion de usuarios</h3>
-                <p className="mt-2 max-w-2xl text-sm text-cloud/70">
-                  Alta, cambios, roles y activacion del equipo operativo.
-                </p>
-              </div>
-              <Link href="/backoffice/users" className="inline-flex h-10 items-center justify-center rounded-2xl bg-cloud px-5 text-sm font-semibold text-ink">
-                Abrir →
-              </Link>
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {moduleCards.map((card) => (
+          <Link
+            key={card.href}
+            href={card.href}
+            className="group rounded-[28px] border border-ink/10 bg-white p-8 shadow-sm transition hover:shadow-lg"
+          >
+            <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${card.color} text-white`}>
+              <card.icon className="h-7 w-7" />
             </div>
-          </section>
-
-          <section className="rounded-[30px] border border-amber-500/30 bg-gradient-to-r from-amber-500 to-orange-500 p-6 text-white shadow-sm">
-            <p className="text-xs uppercase tracking-[0.28em] text-white/70">Catalogo</p>
-            <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <h3 className="text-xl font-semibold">Importar Menú</h3>
-                <p className="mt-2 max-w-2xl text-sm text-white/80">
-                  Carga productos desde Excel o CSV — categorías y precios incluidos.
-                </p>
-              </div>
-              <Link href="/backoffice/import" className="inline-flex h-10 items-center justify-center rounded-2xl bg-white px-5 text-sm font-semibold text-amber-700">
-                Importar →
-              </Link>
-            </div>
-          </section>
-        </div>
-
-        <div className="grid gap-6 xl:grid-cols-2">
-        <article className="rounded-[32px] border border-ink/10 bg-white p-6 shadow-sm">
-          <p className="text-xs uppercase tracking-[0.28em] text-ink/45">Food cost</p>
-          <h3 className="mt-2 text-2xl font-semibold">Recetas con margen</h3>
-          <div className="mt-6 overflow-hidden rounded-[24px] border border-ink/10">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-canvas/70 text-ink/55">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Producto</th>
-                  <th className="px-4 py-3 font-medium">Costo</th>
-                  <th className="px-4 py-3 font-medium">Precio</th>
-                  <th className="px-4 py-3 font-medium">Margen</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recipeRows.map((row) => (
-                  <tr key={row.product} className="border-t border-ink/10 bg-white">
-                    <td className="px-4 py-4 font-medium">{row.product}</td>
-                    <td className="px-4 py-4">{row.cost}</td>
-                    <td className="px-4 py-4">{row.price}</td>
-                    <td className="px-4 py-4 font-semibold text-forest">{row.margin}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-
-        <article className="rounded-[32px] border border-ink/10 bg-ink p-6 text-cloud shadow-sm">
-          <p className="text-xs uppercase tracking-[0.28em] text-cloud/55">Trazabilidad</p>
-          <h3 className="mt-2 text-2xl font-semibold">Ultimos movimientos de almacen</h3>
-          <div className="mt-6 space-y-3">
-            {inventoryRows.map((row) => (
-              <div key={`${row.movement}-${row.ref}`} className="rounded-[24px] bg-cloud/10 p-4">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="font-semibold">{row.ingredient}</p>
-                    <p className="text-sm text-cloud/65">{row.movement}</p>
-                  </div>
-                  <span className="text-lg font-semibold">{row.qty}</span>
-                </div>
-                <p className="mt-3 text-sm text-cloud/65">Referencia {row.ref}</p>
-              </div>
-            ))}
-          </div>
-        </article>
-        </div>
+            <h3 className="mt-6 text-2xl font-semibold group-hover:text-forest">{card.title}</h3>
+            <p className="mt-2 text-sm text-ink/60">{card.description}</p>
+          </Link>
+        ))}
       </div>
     </AppShell>
   );

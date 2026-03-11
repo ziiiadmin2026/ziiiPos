@@ -3,11 +3,14 @@
 import { useState } from "react";
 import type { PosCategory, PosProduct, PosTable } from "@/lib/data/pos";
 import { useCurrency } from "@/components/providers/regional-provider";
+import { OpenTableDialog } from "./open-table-dialog";
 
 type PosBoardProps = {
   categories: PosCategory[];
   products: PosProduct[];
   tables: PosTable[];
+  branchId: string;
+  userId: string;
 };
 
 const STATUS_LABEL: Record<PosTable["status"], string> = {
@@ -24,8 +27,9 @@ const STATUS_COLOR: Record<PosTable["status"], string> = {
   disabled: "text-ink/30"
 };
 
-export function PosBoard({ categories, products, tables }: PosBoardProps) {
+export function PosBoard({ categories, products, tables, branchId, userId }: PosBoardProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [openTableDialog, setOpenTableDialog] = useState<PosTable | null>(null);
   const fmt = useCurrency();
 
   const visibleProducts = selectedCategory
@@ -124,7 +128,11 @@ export function PosBoard({ categories, products, tables }: PosBoardProps) {
                   </div>
                 )}
                 <div className="mt-4 grid grid-cols-2 gap-3">
-                  <button className="rounded-2xl bg-ink px-4 py-2 text-sm font-medium text-cloud">
+                  <button 
+                    onClick={() => table.status === "available" && setOpenTableDialog(table)}
+                    className="rounded-2xl bg-ink px-4 py-2 text-sm font-medium text-cloud disabled:opacity-50"
+                    disabled={table.status !== "available"}
+                  >
                     {table.status === "occupied" ? "Ver cuenta" : "Abrir"}
                   </button>
                   <button className="rounded-2xl border border-ink/10 px-4 py-2 text-sm font-medium">
@@ -136,6 +144,13 @@ export function PosBoard({ categories, products, tables }: PosBoardProps) {
           )}
         </div>
       </section>
+
+      <OpenTableDialog
+        table={openTableDialog}
+        onClose={() => setOpenTableDialog(null)}
+        branchId={branchId}
+        userId={userId}
+      />
     </div>
   );
 }
