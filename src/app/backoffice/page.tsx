@@ -1,7 +1,7 @@
 import { AppShell } from "@/components/layout/app-shell";
 
 const recipeRows = [
-  { product: "Hamburguesa achsas", cost: "$78.40", price: "$219.00", margin: "64.2%" },
+  { product: "Hamburguesa ZiiiPos", cost: "$78.40", price: "$219.00", margin: "64.2%" },
   { product: "Ribeye 350g", cost: "$224.50", price: "$448.00", margin: "49.9%" },
   { product: "Carajillo", cost: "$31.20", price: "$145.00", margin: "78.5%" }
 ];

@@ -1,5 +1,5 @@
 insert into public.organizations (id, name, legal_name)
-values ('11111111-1111-1111-1111-111111111111', 'Achsas Restaurants', 'Achsas Restaurants SA de CV')
+values ('11111111-1111-1111-1111-111111111111', 'ZiiiPos Restaurants', 'ZiiiPos Restaurants SA de CV')
 on conflict (id) do nothing;
 
 insert into public.branches (id, organization_id, name, code, address)

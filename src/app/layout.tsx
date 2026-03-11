@@ -15,7 +15,7 @@ const displayFont = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Achsas POS",
+  title: "ZiiiPos",
   description: "POS profesional y backoffice para restaurantes con Next.js y Supabase"
 };
 

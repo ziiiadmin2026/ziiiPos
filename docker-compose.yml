@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: achsas-app
+    container_name: ziiipos-app
     restart: unless-stopped
     depends_on:
       db:
@@ -205,8 +205,8 @@ services:
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
       AUTH_JWT_SECRET: ${JWT_SECRET}
-      DEFAULT_ORGANIZATION_NAME: Achsas
-      DEFAULT_PROJECT_NAME: POS Local
+      DEFAULT_ORGANIZATION_NAME: ZiiiPos
+      DEFAULT_PROJECT_NAME: ZiiiPos Local
       DASHBOARD_USERNAME: ${DASHBOARD_USERNAME:-supabase}
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD:-changeThisPassword1}
     networks:

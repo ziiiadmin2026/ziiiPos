@@ -45,7 +45,7 @@ export const posProducts: PosProduct[] = [
   { id: "prod-1", categoryId: "cat-1", name: "Tostada de atun", price: 169, prepTime: "6 min" },
   { id: "prod-2", categoryId: "cat-1", name: "Croquetas de elote", price: 132, prepTime: "8 min" },
   { id: "prod-3", categoryId: "cat-2", name: "Ribeye 350g", price: 448, prepTime: "14 min" },
-  { id: "prod-4", categoryId: "cat-2", name: "Hamburguesa achsas", price: 219, prepTime: "10 min" },
+  { id: "prod-4", categoryId: "cat-2", name: "Hamburguesa ZiiiPos", price: 219, prepTime: "10 min" },
   { id: "prod-5", categoryId: "cat-3", name: "Limonada mineral", price: 68, prepTime: "2 min" },
   { id: "prod-6", categoryId: "cat-3", name: "Carajillo", price: 145, prepTime: "3 min" },
   { id: "prod-7", categoryId: "cat-4", name: "Cheesecake vasco", price: 118, prepTime: "4 min" },
@@ -66,7 +66,7 @@ export const stockAlerts = [
 ];
 
 export const topProducts = [
-  { name: "Hamburguesa achsas", sold: 38, revenue: "$8,322" },
+  { name: "Hamburguesa ZiiiPos", sold: 38, revenue: "$8,322" },
   { name: "Ribeye 350g", sold: 21, revenue: "$9,408" },
   { name: "Carajillo", sold: 29, revenue: "$4,205" }
 ];

@@ -1,7 +1,7 @@
 services:
   caddy:
     image: caddy:2.8-alpine
-    container_name: achsas-caddy
+    container_name: ziiipos-caddy
     restart: unless-stopped
     depends_on:
       app:
@@ -26,7 +26,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: achsas-app
+    container_name: ziiipos-app
     restart: unless-stopped
     depends_on:
       db:
@@ -227,8 +227,8 @@ services:
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
       AUTH_JWT_SECRET: ${JWT_SECRET}
-      DEFAULT_ORGANIZATION_NAME: Achsas
-      DEFAULT_PROJECT_NAME: POS Produccion
+      DEFAULT_ORGANIZATION_NAME: ZiiiPos
+      DEFAULT_PROJECT_NAME: ZiiiPos Produccion
       DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
     networks:

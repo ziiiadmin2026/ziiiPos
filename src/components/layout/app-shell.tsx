@@ -1,6 +1,9 @@
 import type { Route } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ChartNoAxesCombined, ChefHat, LayoutDashboard, WalletCards } from "lucide-react";
+import { logoutAction } from "@/app/login/actions";
+import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -15,7 +18,18 @@ type AppShellProps = {
   children: React.ReactNode;
 };
 
-export function AppShell({ title, subtitle, children }: AppShellProps) {
+export async function AppShell({ title, subtitle, children }: AppShellProps) {
+  const supabase = await createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const displayName = user.user_metadata.full_name || user.email || "Operacion";
+
   return (
     <div className="min-h-screen bg-canvas bg-grain text-ink">
       <div className="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[260px_1fr] lg:px-6">
@@ -26,7 +40,7 @@ export function AppShell({ title, subtitle, children }: AppShellProps) {
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-ink/55">Restaurant OS</p>
-              <h1 className="font-semibold">Achsas POS</h1>
+              <h1 className="font-semibold">ZiiiPos</h1>
             </div>
           </div>
 
@@ -45,6 +59,17 @@ export function AppShell({ title, subtitle, children }: AppShellProps) {
               </Link>
             ))}
           </nav>
+
+          <div className="mt-10 rounded-[28px] border border-ink/10 bg-white/80 p-5">
+            <p className="text-xs uppercase tracking-[0.28em] text-ink/45">Sesion activa</p>
+            <p className="mt-3 text-lg font-semibold">{displayName}</p>
+            <p className="mt-1 break-all text-sm text-ink/55">{user.email}</p>
+            <form action={logoutAction} className="mt-5">
+              <button className="inline-flex h-11 w-full items-center justify-center rounded-2xl border border-ink/10 bg-canvas px-4 text-sm font-medium transition hover:border-ink/20 hover:bg-white">
+                Cerrar sesion
+              </button>
+            </form>
+          </div>
 
           <div className="mt-10 rounded-[28px] bg-ink p-5 text-cloud">
             <p className="text-xs uppercase tracking-[0.28em] text-cloud/60">Turno actual</p>

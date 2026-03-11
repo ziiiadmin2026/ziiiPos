@@ -14,7 +14,7 @@ Confirma estos prerequisitos:
 
 Valores recomendados para esta VM:
 
-- Nombre de la VM: `achsas-pos-prod`
+- Nombre de la VM: `ziiipos-prod`
 - Sistema operativo invitado: `Ubuntu 64-bit`
 - CPU: `4 vCPU`
 - RAM: `8 GB` minimo; `12 GB` recomendado
@@ -30,7 +30,7 @@ Valores recomendados para esta VM:
 5. Installer disc image file (iso): selecciona el ISO de Ubuntu Server 24.04.
 6. Guest operating system: `Linux`.
 7. Version: `Ubuntu 64-bit`.
-8. Virtual machine name: `achsas-pos-prod`.
+8. Virtual machine name: `ziiipos-prod`.
 9. Ubicacion: usa un disco rapido del host.
 10. Processors: `1` socket y `4` cores por socket, o equivalente a `4 vCPU`.
 11. Memory: `8192 MB` o mas.
@@ -63,7 +63,7 @@ Red:
 
 6. Confirma que la interfaz de red obtiene IP por DHCP.
 7. Si tu red productiva requiere IP fija, deja nota de la IP que vas a reservar.
-
+    
 Proxy y mirror:
 
 8. Proxy: dejalo vacio salvo que tu red lo requiera.
@@ -77,7 +77,7 @@ Storage:
 
 Perfil del servidor:
 
-13. Server name: `achsas-prod`.
+13. Server name: `ziiipos`.
 14. Username administrativo: uno distinto de `root`, por ejemplo `deploy`.
 15. Password: usa una contrasena fuerte y guardala en un gestor de secretos.
 
@@ -203,8 +203,8 @@ sudo systemctl status docker --no-pager
 Usa un directorio claro para aplicaciones:
 
 ```bash
-sudo mkdir -p /srv/achsas
-sudo chown -R $USER:$USER /srv/achsas
+sudo mkdir -p /srv/ziiipos
+sudo chown -R $USER:$USER /srv/ziiipos
 ```
 
 Si vas a clonar por SSH, prepara tu clave o usa un deploy key.

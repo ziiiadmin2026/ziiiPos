@@ -1,4 +1,4 @@
-# POS System Achsas
+# ZiiiPos
 
 Sistema POS y backoffice para restaurantes construido con Next.js, Tailwind CSS y Supabase self-hosted.
 
