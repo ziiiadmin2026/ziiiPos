@@ -1,7 +1,7 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { requireAppAccess } from "@/lib/auth/permissions";
 import Link from "next/link";
-import { Building2, LayoutGrid, Users, FileUp } from "lucide-react";
+import { Building2, LayoutGrid, Users, FileUp, Palette } from "lucide-react";
 import type { Route } from "next";
 
 const moduleCards = [
@@ -20,6 +20,13 @@ const moduleCards = [
     color: "bg-ember"
   },
   {
+    href: "/backoffice/branding" as Route,
+    title: "Personalizacion",
+    description: "Tu logo y colores de marca",
+    icon: Palette,
+    color: "bg-amber-600"
+  },
+  {
     href: "/backoffice/users" as Route,
     title: "Usuarios y permisos",
     description: "Administra el equipo y roles",
@@ -31,7 +38,7 @@ const moduleCards = [
     title: "Importar menu",
     description: "Carga productos desde archivo",
     icon: FileUp,
-    color: "bg-amber-600"
+    color: "bg-stone-600"
   }
 ];
 

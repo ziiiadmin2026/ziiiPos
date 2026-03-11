@@ -28,17 +28,37 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
   const { branchName, activeTables, cashInfo } = await getShellContextData(branchId);
   const regionalConfig = await getRegionalConfig();
 
+  // Get branding info
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const admin = createAdminClient();
+  const { data: org } = await admin
+    .from("organizations")
+    .select("name, brand_name, logo_url")
+    .eq("id", appUser.organization_id)
+    .single();
+
+  const brandName = org?.brand_name || org?.name || "ZiiiPos";
+  const logoUrl = org?.logo_url;
+
   return (
     <div className="min-h-screen bg-canvas bg-grain text-ink">
       <div className="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[260px_1fr] lg:px-6">
         <aside className="rounded-[32px] border border-white/60 bg-cloud/85 p-6 shadow-panel backdrop-blur">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ink text-cloud">
-              <ChefHat className="h-6 w-6" />
-            </div>
+            {logoUrl ? (
+              <img 
+                src={logoUrl} 
+                alt={brandName}
+                className="h-12 w-auto object-contain"
+              />
+            ) : (
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ink text-cloud">
+                <ChefHat className="h-6 w-6" />
+              </div>
+            )}
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-ink/55">Restaurant OS</p>
-              <h1 className="font-semibold">ZiiiPos</h1>
+              <h1 className="font-semibold">{brandName}</h1>
             </div>
           </div>
 
@@ -86,6 +106,19 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
                   <span>Ventas en caja</span>
                   <span>{formatMoney(cashInfo.totalSales, regionalConfig)}</span>
                 </div>
+
+          {/* Powered by ZIII Solutions */}
+          <div className="mt-6 rounded-2xl border border-amber-200/50 bg-gradient-to-br from-amber-50/50 to-orange-50/50 p-4">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-600 text-white font-bold text-sm">
+                Z
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.25em] text-amber-900/50">Powered by</p>
+                <p className="text-sm font-bold text-amber-900">ZIII Solutions</p>
+              </div>
+            </div>
+          </div>
               </div>
             </div>
           ) : (

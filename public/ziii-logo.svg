@@ -1,0 +1,15 @@
+<svg width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Z Icon -->
+  <rect x="4" y="4" width="40" height="40" rx="10" fill="#D97706"/>
+  <path d="M14 14H34L14 34H34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- ZIII Text -->
+  <text x="54" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="700" fill="#1C1917">
+    ZIII
+  </text>
+  
+  <!-- Solutions Text -->
+  <text x="54" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#78716C" letter-spacing="0.1em">
+    SOLUTIONS
+  </text>
+</svg>
