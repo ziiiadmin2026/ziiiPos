@@ -66,16 +66,6 @@ alter schema _realtime owner to ${DB_ADMIN_USER};
 grant usage, create on schema _realtime to ${DB_ADMIN_USER};
 SQL
 
-for file in /pos-bootstrap/migrations/*.sql; do
-  if [ -f "$file" ]; then
-    psql -v ON_ERROR_STOP=1 -U "$DB_ADMIN_USER" -d postgres -f "$file"
-  fi
-done
-
-for file in /pos-bootstrap/seed/*.sql; do
-  if [ -f "$file" ]; then
-    psql -v ON_ERROR_STOP=1 -U "$DB_ADMIN_USER" -d postgres -f "$file"
-  fi
-done
-
+# NOTE: migrations and seeds are handled by the 'migrator' service on every
+# docker compose up. This script only runs on first DB initialization.
 touch "$BOOTSTRAP_MARKER"

@@ -8,6 +8,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
       kong:
         condition: service_started
     env_file:
@@ -28,6 +30,27 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    networks:
+      - pos-network
+
+  migrator:
+    image: postgres:15-alpine
+    container_name: ziiipos-migrator
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env.vm-local
+    environment:
+      SUPABASE_DB_ADMIN_USER: ${SUPABASE_DB_ADMIN_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./supabase/migrations:/migrations:ro
+      - ./supabase/seed:/seed:ro
+      - ./supabase/init/migrate.sh:/migrate.sh:ro
+    entrypoint: ["/bin/sh", "/migrate.sh"]
+    command: []
     networks:
       - pos-network
 

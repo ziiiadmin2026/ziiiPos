@@ -98,7 +98,8 @@ create table if not exists public.products (
   is_open_price boolean not null default false,
   tracks_inventory boolean not null default true,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  unique (branch_id, name)
 );
 
 create table if not exists public.units_of_measure (
