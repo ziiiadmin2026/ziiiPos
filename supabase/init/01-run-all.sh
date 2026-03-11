@@ -34,6 +34,11 @@ end;
 SQL
 
 psql -v ON_ERROR_STOP=1 -U "$DB_ADMIN_USER" -d postgres <<SQL
+grant all privileges on database postgres to ${DB_ADMIN_USER};
+grant all privileges on database postgres to supabase_auth_admin;
+grant all privileges on database postgres to supabase_storage_admin;
+grant all privileges on database postgres to authenticator;
+
 grant usage, create on schema public to supabase_auth_admin;
 grant usage on schema public to authenticator;
 

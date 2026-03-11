@@ -21,6 +21,7 @@ def sign_jwt(payload: dict, secret: str) -> str:
 
 def main() -> None:
   jwt_secret = base64url(secrets.token_bytes(48))
+  secret_key_base = base64url(secrets.token_bytes(48))
   postgres_password = base64url(secrets.token_bytes(24))
   dashboard_password = base64url(secrets.token_bytes(24))
   expires_at = int(time.time()) + 60 * 60 * 24 * 365 * 10
@@ -44,6 +45,8 @@ def main() -> None:
   print("# Self-hosted Supabase keys for local VM deployment")
   print(f"POSTGRES_PASSWORD={postgres_password}")
   print(f"JWT_SECRET={jwt_secret}")
+  print(f"SECRET_KEY_BASE={secret_key_base}")
+  print("DB_ENC_KEY=supabaserealtime")
   print(f"ANON_KEY={anon_key}")
   print(f"SERVICE_ROLE_KEY={service_role_key}")
   print(f"NEXT_PUBLIC_SUPABASE_ANON_KEY={anon_key}")

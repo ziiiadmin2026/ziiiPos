@@ -82,7 +82,7 @@ services:
       - pos-network
 
   auth:
-    image: supabase/gotrue:v2.177.0
+    image: supabase/gotrue:v2.186.0
     container_name: supabase-auth
     restart: unless-stopped
     depends_on:
@@ -134,8 +134,9 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       DB_NAME: postgres
       DB_AFTER_CONNECT_QUERY: 'SET search_path TO _realtime'
+      DB_ENC_KEY: ${DB_ENC_KEY:-supabaserealtime}
       API_JWT_SECRET: ${JWT_SECRET}
-      SECRET_KEY_BASE: ${JWT_SECRET}supersecret
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-dev-realtime-secret-key-base-change-me}
       RLIMIT_NOFILE: "10000"
       APP_NAME: realtime
       SEED_SELF_HOST: "true"
