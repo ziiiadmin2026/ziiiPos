@@ -1,4 +1,5 @@
 import { AppShell } from "@/components/layout/app-shell";
+import Link from "next/link";
 
 const recipeRows = [
   { product: "Hamburguesa ZiiiPos", cost: "$78.40", price: "$219.00", margin: "64.2%" },
@@ -19,7 +20,23 @@ export default function BackofficePage() {
       title="Backoffice y costeo"
       subtitle="Control de ingredientes, compras, recetas y movimientos para mantener margen y stock bajo supervision constante."
     >
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="space-y-6">
+        <section className="rounded-[30px] border border-ink/10 bg-gradient-to-r from-ink to-stone-800 p-6 text-cloud shadow-sm">
+          <p className="text-xs uppercase tracking-[0.28em] text-cloud/55">Administracion</p>
+          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <h3 className="text-2xl font-semibold">Gestion de usuarios conectada a Supabase</h3>
+              <p className="mt-2 max-w-2xl text-sm text-cloud/70">
+                Alta, cambios, roles y activacion del equipo operativo con acceso real al sistema.
+              </p>
+            </div>
+            <Link href="/backoffice/users" className="inline-flex h-12 items-center justify-center rounded-2xl bg-cloud px-5 text-sm font-semibold text-ink">
+              Abrir gestion de usuarios
+            </Link>
+          </div>
+        </section>
+
+        <div className="grid gap-6 xl:grid-cols-2">
         <article className="rounded-[32px] border border-ink/10 bg-white p-6 shadow-sm">
           <p className="text-xs uppercase tracking-[0.28em] text-ink/45">Food cost</p>
           <h3 className="mt-2 text-2xl font-semibold">Recetas con margen</h3>
@@ -65,6 +82,7 @@ export default function BackofficePage() {
             ))}
           </div>
         </article>
+        </div>
       </div>
     </AppShell>
   );

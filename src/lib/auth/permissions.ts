@@ -34,6 +34,10 @@ const defaultModuleByRole: Record<AppRole, AppModule> = {
   inventory: "backoffice"
 };
 
+export function hasRole(role: AppRole, allowedRoles: AppRole[]) {
+  return allowedRoles.includes(role);
+}
+
 export function canAccessModule(role: AppRole, module: AppModule) {
   return modulePermissions[role].includes(module);
 }
@@ -91,4 +95,14 @@ export async function requireAppAccess(module: AppModule) {
   }
 
   return { authUser, appUser };
+}
+
+export async function requireRoles(allowedRoles: AppRole[]) {
+  const context = await requireAppAccess("backoffice");
+
+  if (!hasRole(context.appUser.role, allowedRoles)) {
+    redirect("/unauthorized?reason=perfil");
+  }
+
+  return context;
 }
