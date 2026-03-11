@@ -2,7 +2,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # ZiiiPos — Migration Runner
 # Runs on every `docker compose up`. Applies only pending migrations and seeds.
-# Progress is tracked in public.schema_migrations so nothing runs twice.
+# Progress is tracked in public._pos_migrations so nothing runs twice.
 # ─────────────────────────────────────────────────────────────────────────────
 set -eu
 
@@ -92,56 +92,6 @@ for file in $(ls "${SEED_DIR}"/*.sql 2>/dev/null | sort); do
     psql -v ON_ERROR_STOP=1 "$DB_URL" -f "$file"
     psql "$DB_URL" -c \
       "INSERT INTO public._pos_migrations (version) VALUES ('${version}') ON CONFLICT DO NOTHING;"
-    echo "  ✓ Seed listo"
-  else
-    echo "  - Seed ya cargado: ${seed_name}"
-  fi
-done
-[ "$found_seeds" = "0" ] && echo "  (sin archivos de seed)"
-
-echo ""
-echo "✓ Todas las migraciones completadas."
-
-# 3. Apply pending migrations (sorted by filename)
-echo ""
-echo "→ Verificando migraciones..."
-found_migrations=0
-for file in $(ls "${MIGRATIONS_DIR}"/*.sql 2>/dev/null | sort); do
-  found_migrations=1
-  version=$(basename "$file" .sql)
-  applied=$(psql -t -A "$DB_URL" \
-    -c "SELECT COUNT(1) FROM public.schema_migrations WHERE version='${version}';" \
-    | tr -d '[:space:]')
-
-  if [ "$applied" = "0" ]; then
-    echo "  ► Aplicando: ${version}"
-    psql -v ON_ERROR_STOP=1 "$DB_URL" -f "$file"
-    psql "$DB_URL" -c \
-      "INSERT INTO public.schema_migrations (version) VALUES ('${version}') ON CONFLICT DO NOTHING;"
-    echo "  ✓ Listo"
-  else
-    echo "  - Ya aplicada: ${version}"
-  fi
-done
-[ "$found_migrations" = "0" ] && echo "  (sin archivos de migracion)"
-
-# 4. Apply pending seeds (each seed runs exactly once)
-echo ""
-echo "→ Verificando seeds..."
-found_seeds=0
-for file in $(ls "${SEED_DIR}"/*.sql 2>/dev/null | sort); do
-  found_seeds=1
-  seed_name=$(basename "$file" .sql)
-  version="seed/${seed_name}"
-  applied=$(psql -t -A "$DB_URL" \
-    -c "SELECT COUNT(1) FROM public.schema_migrations WHERE version='${version}';" \
-    | tr -d '[:space:]')
-
-  if [ "$applied" = "0" ]; then
-    echo "  ► Cargando seed: ${seed_name}"
-    psql -v ON_ERROR_STOP=1 "$DB_URL" -f "$file"
-    psql "$DB_URL" -c \
-      "INSERT INTO public.schema_migrations (version) VALUES ('${version}') ON CONFLICT DO NOTHING;"
     echo "  ✓ Seed listo"
   else
     echo "  - Seed ya cargado: ${seed_name}"
