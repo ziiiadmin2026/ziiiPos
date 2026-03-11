@@ -26,6 +26,25 @@ services:
     networks:
       - pos-network
 
+  migrator:
+    image: postgres:15-alpine
+    container_name: ziiipos-migrator
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SUPABASE_DB_ADMIN_USER: ${SUPABASE_DB_ADMIN_USER:-supabase_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - ./supabase/migrations:/migrations:ro
+      - ./supabase/seed:/seed:ro
+      - ./supabase/init/migrate.sh:/migrate.sh:ro
+    entrypoint: ["/bin/sh", "-c", "tr -d '\\r' < /migrate.sh > /tmp/m.sh && sh /tmp/m.sh"]
+    command: []
+    networks:
+      - pos-network
+
   db:
     image: supabase/postgres:15.8.1.060
     container_name: supabase-db

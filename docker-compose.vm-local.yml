@@ -49,7 +49,7 @@ services:
       - ./supabase/migrations:/migrations:ro
       - ./supabase/seed:/seed:ro
       - ./supabase/init/migrate.sh:/migrate.sh:ro
-    entrypoint: ["/bin/sh", "/migrate.sh"]
+    entrypoint: ["/bin/sh", "-c", "tr -d '\\r' < /migrate.sh > /tmp/m.sh && sh /tmp/m.sh"]
     command: []
     networks:
       - pos-network
