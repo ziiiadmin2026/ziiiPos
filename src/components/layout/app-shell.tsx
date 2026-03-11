@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ChartNoAxesCombined, ChefHat, LayoutDashboard, WalletCards } from "lucide-react";
 import { logoutAction } from "@/app/login/actions";
 import { canAccessModule, type AppModule, requireAppAccess } from "@/lib/auth/permissions";
-import { cn } from "@/lib/utils";
+import { getShellContextData } from "@/lib/data/pos";
+import { cn, currency } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, module: "dashboard" },
@@ -22,6 +23,8 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
   const { authUser, appUser } = await requireAppAccess(module);
   const displayName = appUser.full_name || authUser.user_metadata.full_name || authUser.email || "Operacion";
   const visibleNavItems = navItems.filter((item) => canAccessModule(appUser.role, item.module as AppModule));
+  const branchId = appUser.branch_id ?? "22222222-2222-2222-2222-222222222222";
+  const { branchName, activeTables, cashInfo } = await getShellContextData(branchId);
 
   return (
     <div className="min-h-screen bg-canvas bg-grain text-ink">
@@ -67,21 +70,28 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
             </form>
           </div>
 
-          <div className="mt-10 rounded-[28px] bg-ink p-5 text-cloud">
-            <p className="text-xs uppercase tracking-[0.28em] text-cloud/60">Turno actual</p>
-            <p className="mt-3 text-3xl font-semibold">Caja abierta</p>
-            <p className="mt-2 text-sm text-cloud/70">Cajero: Andrea Soto</p>
-            <div className="mt-6 rounded-2xl bg-cloud/10 p-4 text-sm">
-              <div className="flex items-center justify-between">
-                <span>Fondo inicial</span>
-                <span>$2,000</span>
-              </div>
-              <div className="mt-2 flex items-center justify-between">
-                <span>Ventas</span>
-                <span>$18,420</span>
+          {cashInfo ? (
+            <div className="mt-10 rounded-[28px] bg-ink p-5 text-cloud">
+              <p className="text-xs uppercase tracking-[0.28em] text-cloud/60">Turno actual</p>
+              <p className="mt-3 text-3xl font-semibold">{cashInfo.isOpen ? "Caja abierta" : "Caja cerrada"}</p>
+              <p className="mt-2 text-sm text-cloud/70">{cashInfo.registerName} · {cashInfo.cashierName}</p>
+              <div className="mt-6 rounded-2xl bg-cloud/10 p-4 text-sm">
+                <div className="flex items-center justify-between">
+                  <span>Fondo inicial</span>
+                  <span>{currency(cashInfo.openingAmount)}</span>
+                </div>
+                <div className="mt-2 flex items-center justify-between">
+                  <span>Ventas en caja</span>
+                  <span>{currency(cashInfo.totalSales)}</span>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="mt-10 rounded-[28px] bg-ink/10 p-5 text-ink/50">
+              <p className="text-xs uppercase tracking-[0.28em]">Turno</p>
+              <p className="mt-3 text-lg font-semibold">Sin caja abierta</p>
+            </div>
+          )}
         </aside>
 
         <main className="rounded-[36px] border border-white/60 bg-cloud/75 p-5 shadow-panel backdrop-blur lg:p-8">
@@ -94,15 +104,15 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
             <div className="grid grid-cols-2 gap-3 text-sm lg:grid-cols-3">
               <div className="rounded-2xl border border-ink/10 bg-white/80 px-4 py-3">
                 <p className="text-ink/50">Sucursal</p>
-                <p className="mt-1 font-semibold">Polanco</p>
+                <p className="mt-1 font-semibold">{branchName}</p>
               </div>
               <div className="rounded-2xl border border-ink/10 bg-white/80 px-4 py-3">
                 <p className="text-ink/50">Servicio</p>
-                <p className="mt-1 font-semibold">Cena</p>
+                <p className="mt-1 font-semibold">{getServiceName()}</p>
               </div>
               <div className="rounded-2xl border border-ink/10 bg-white/80 px-4 py-3">
                 <p className="text-ink/50">Mesas activas</p>
-                <p className="mt-1 font-semibold">14</p>
+                <p className="mt-1 font-semibold">{activeTables}</p>
               </div>
             </div>
           </header>
@@ -112,4 +122,11 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
       </div>
     </div>
   );
+}
+
+function getServiceName() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Desayuno";
+  if (hour < 16) return "Comida";
+  return "Cena";
 }
