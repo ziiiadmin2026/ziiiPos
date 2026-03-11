@@ -70,7 +70,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "psql -U ${SUPABASE_DB_ADMIN_USER} -d postgres -tAc \"select 1 from pg_namespace where nspname = 'auth'\" | grep -q 1"
+          "psql -U ${SUPABASE_DB_ADMIN_USER} -d postgres -tAc \"select 1 from pg_tables where schemaname = 'public' and tablename = 'organizations'\" | grep -q 1"
         ]
       interval: 10s
       timeout: 5s
