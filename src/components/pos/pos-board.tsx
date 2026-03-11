@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { PosCategory, PosProduct, PosTable } from "@/lib/data/pos";
-import { currency } from "@/lib/utils";
+import { useCurrency } from "@/components/providers/regional-provider";
 
 type PosBoardProps = {
   categories: PosCategory[];
@@ -26,6 +26,7 @@ const STATUS_COLOR: Record<PosTable["status"], string> = {
 
 export function PosBoard({ categories, products, tables }: PosBoardProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const fmt = useCurrency();
 
   const visibleProducts = selectedCategory
     ? products.filter((p) => p.categoryId === selectedCategory)
@@ -75,7 +76,7 @@ export function PosBoard({ categories, products, tables }: PosBoardProps) {
                 </p>
                 <h3 className="mt-4 text-xl font-semibold">{product.name}</h3>
                 <div className="mt-8 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-forest">{currency(product.price)}</span>
+                  <span className="text-lg font-semibold text-forest">{fmt(product.price)}</span>
                   <button className="rounded-2xl bg-ink px-4 py-2 text-sm font-medium text-cloud transition hover:bg-ember">
                     Agregar
                   </button>
@@ -119,7 +120,7 @@ export function PosBoard({ categories, products, tables }: PosBoardProps) {
                 {table.status === "occupied" && (
                   <div className="mt-4 flex items-center justify-between text-sm">
                     <span className="text-ink/55">Cuenta actual</span>
-                    <span className="font-semibold">{currency(table.openSaleTotal)}</span>
+                    <span className="font-semibold">{fmt(table.openSaleTotal)}</span>
                   </div>
                 )}
                 <div className="mt-4 grid grid-cols-2 gap-3">

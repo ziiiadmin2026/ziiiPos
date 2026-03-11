@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getRegionalConfig, formatMoney } from "@/lib/config/regional";
 
 export type DashboardMetric = {
   label: string;
@@ -28,6 +29,7 @@ export type KitchenTicket = {
 
 export async function getDashboardData(branchId: string) {
   const admin = createAdminClient();
+  const regionalConfig = await getRegionalConfig();
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
@@ -85,13 +87,13 @@ export async function getDashboardData(branchId: string) {
   const metrics: DashboardMetric[] = [
     {
       label: "Ventas del dia",
-      value: formatCurrency(totalSales),
+      value: formatMoney(totalSales, regionalConfig),
       delta: `${sales.length} ventas cerradas`,
       tone: "warm"
     },
     {
       label: "Ticket promedio",
-      value: formatCurrency(avgTicket),
+      value: formatMoney(avgTicket, regionalConfig),
       delta: `${sales.length} tickets`,
       tone: "forest"
     },
@@ -134,7 +136,7 @@ export async function getDashboardData(branchId: string) {
     .map((p) => ({
       name: p.name,
       sold: Math.round(p.sold),
-      revenue: formatCurrency(p.revenue)
+      revenue: formatMoney(p.revenue, regionalConfig)
     }));
 
   // ── Stock Alerts ──────────────────────────────────────────
@@ -197,9 +199,7 @@ export async function getDashboardData(branchId: string) {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
-function formatCurrency(n: number) {
-  return new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
-}
+
 
 function formatQty(n: number) {
   return n % 1 === 0 ? String(n) : n.toFixed(1);

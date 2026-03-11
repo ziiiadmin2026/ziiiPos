@@ -2,10 +2,12 @@
 
 import { useRef, useState } from "react";
 import type { ImportPreview, ImportResult, ParsedProduct } from "@/app/api/import/menu/route";
+import { useCurrency } from "@/components/providers/regional-provider";
 
 type Step = "upload" | "preview" | "done";
 
 export default function ImportClient() {
+  const fmt = useCurrency();
   const fileRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<Step>("upload");
   const [loading, setLoading] = useState(false);
@@ -206,7 +208,7 @@ export default function ImportClient() {
                       <td className="px-4 py-2 text-gray-800">{p.name}</td>
                       <td className="px-4 py-2 text-gray-500 max-w-xs truncate">{p.description || "—"}</td>
                       <td className="px-4 py-2 text-right font-medium text-gray-800">
-                        {new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(p.price)}
+                        {fmt(p.price)}
                       </td>
                       <td className="px-4 py-2 text-center">
                         <span

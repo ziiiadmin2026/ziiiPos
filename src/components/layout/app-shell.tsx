@@ -4,7 +4,8 @@ import { ChartNoAxesCombined, ChefHat, LayoutDashboard, WalletCards } from "luci
 import { logoutAction } from "@/app/login/actions";
 import { canAccessModule, type AppModule, requireAppAccess } from "@/lib/auth/permissions";
 import { getShellContextData } from "@/lib/data/pos";
-import { cn, currency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { getRegionalConfig, formatMoney } from "@/lib/config/regional";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, module: "dashboard" },
@@ -25,6 +26,7 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
   const visibleNavItems = navItems.filter((item) => canAccessModule(appUser.role, item.module as AppModule));
   const branchId = appUser.branch_id ?? "22222222-2222-2222-2222-222222222222";
   const { branchName, activeTables, cashInfo } = await getShellContextData(branchId);
+  const regionalConfig = await getRegionalConfig();
 
   return (
     <div className="min-h-screen bg-canvas bg-grain text-ink">
@@ -78,11 +80,11 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
               <div className="mt-6 rounded-2xl bg-cloud/10 p-4 text-sm">
                 <div className="flex items-center justify-between">
                   <span>Fondo inicial</span>
-                  <span>{currency(cashInfo.openingAmount)}</span>
+                  <span>{formatMoney(cashInfo.openingAmount, regionalConfig)}</span>
                 </div>
                 <div className="mt-2 flex items-center justify-between">
                   <span>Ventas en caja</span>
-                  <span>{currency(cashInfo.totalSales)}</span>
+                  <span>{formatMoney(cashInfo.totalSales, regionalConfig)}</span>
                 </div>
               </div>
             </div>
