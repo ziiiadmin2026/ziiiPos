@@ -11,6 +11,7 @@ export async function createTableAction(formData: FormData) {
   const serviceAreaId = formData.get("service_area_id") as string;
   const capacity = parseInt(formData.get("capacity") as string);
   const status = formData.get("status") as string;
+  const shape = formData.get("shape") as string;
   const isActive = formData.get("is_active") === "on";
 
   if (!branchId || !tableNumber) {
@@ -23,6 +24,7 @@ export async function createTableAction(formData: FormData) {
     service_area_id: serviceAreaId || null,
     capacity: capacity || 4,
     status: status || "available",
+    shape: shape || "square",
     is_active: isActive
   });
 
@@ -46,6 +48,7 @@ export async function updateTableAction(formData: FormData) {
   const serviceAreaId = formData.get("service_area_id") as string;
   const capacity = parseInt(formData.get("capacity") as string);
   const status = formData.get("status") as string;
+  const shape = formData.get("shape") as string;
   const isActive = formData.get("is_active") === "on";
 
   if (!id || !tableNumber) {
@@ -59,6 +62,7 @@ export async function updateTableAction(formData: FormData) {
       service_area_id: serviceAreaId || null,
       capacity: capacity || 4,
       status: status || "available",
+      shape: shape || "square",
       is_active: isActive
     })
     .eq("id", id);
@@ -108,6 +112,34 @@ export async function createAreaAction(formData: FormData) {
       return { error: "Ya existe un area con este nombre" };
     }
     return { error: "Error al crear el area" };
+  }
+
+  revalidatePath("/backoffice/tables");
+  return { success: true };
+}
+
+export async function updateTablePositionAction(formData: FormData) {
+  const admin = createAdminClient();
+
+  const tableId = formData.get("tableId") as string;
+  const posX = parseInt(formData.get("pos_x") as string);
+  const posY = parseInt(formData.get("pos_y") as string);
+
+  if (!tableId) {
+    return { error: "ID de mesa es requerido" };
+  }
+
+  const { error } = await admin
+    .from("restaurant_tables")
+    .update({
+      pos_x: posX,
+      pos_y: posY
+    })
+    .eq("id", tableId);
+
+  if (error) {
+    console.error("Error updating table position:", error);
+    return { error: "Error al actualizar la posicion" };
   }
 
   revalidatePath("/backoffice/tables");

@@ -11,6 +11,7 @@ type Table = {
   status: "available" | "occupied" | "reserved" | "disabled";
   is_active: boolean;
   service_area_id: string | null;
+  shape?: string | null;
 };
 
 type ServiceArea = {
@@ -118,6 +119,21 @@ export function TableFormDialog({ open, onClose, table, branchId, areas }: Table
               min="1"
               className="mt-1 w-full rounded-xl border border-ink/10 px-4 py-3 transition focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-ink/70">
+              Forma visual
+            </label>
+            <select
+              name="shape"
+              defaultValue={table?.shape ?? "square"}
+              className="mt-1 w-full rounded-xl border border-ink/10 px-4 py-3 transition focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest"
+            >
+              <option value="square">Cuadrada</option>
+              <option value="round">Redonda</option>
+              <option value="rectangle">Rectangular</option>
+            </select>
           </div>
 
           <div>

@@ -27,7 +27,7 @@ export default async function TablesPage() {
       .order("sort_order"),
     admin
       .from("restaurant_tables")
-      .select("id, table_number, capacity, status, is_active, service_area_id")
+      .select("id, table_number, capacity, status, is_active, service_area_id, pos_x, pos_y, width, height, rotation, shape")
       .eq("branch_id", branchId)
       .order("table_number")
   ]);
