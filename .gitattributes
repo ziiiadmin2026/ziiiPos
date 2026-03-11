@@ -1,0 +1,8 @@
+# Default: auto-detect
+* text=auto
+
+# Shell scripts MUST use LF (Linux VM)
+*.sh text eol=lf
+
+# SQL files use LF too
+*.sql text eol=lf
