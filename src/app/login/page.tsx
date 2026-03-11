@@ -46,7 +46,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     .single();
 
   const brandName = org?.brand_name || org?.name || "ZiiiPos";
-  const logoUrl = org?.logo_url;
+  const logoUrl = org?.logo_url || "https://ziii.com.mx/logos/1ZIIIlogo.png";
 
   const errorParam = resolvedParams.error;
   const error = Array.isArray(errorParam) ? errorParam[0] : errorParam;

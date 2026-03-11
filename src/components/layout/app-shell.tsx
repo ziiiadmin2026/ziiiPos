@@ -38,7 +38,7 @@ export async function AppShell({ title, subtitle, module, children }: AppShellPr
     .single();
 
   const brandName = org?.brand_name || org?.name || "ZiiiPos";
-  const logoUrl = org?.logo_url;
+  const logoUrl = org?.logo_url || "https://ziii.com.mx/logos/1ZIIIlogo.png";
 
   return (
     <div className="min-h-screen bg-canvas bg-grain text-ink">
