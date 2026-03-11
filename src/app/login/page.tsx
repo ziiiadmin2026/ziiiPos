@@ -1,4 +1,4 @@
-import { ChefHat, ShieldCheck, TabletSmartphone, Wifi } from "lucide-react";
+import { BriefcaseBusiness, ChefHat, ShieldCheck, UsersRound, WalletCards } from "lucide-react";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/auth/login-form";
 import { createClient } from "@/lib/supabase/server";
@@ -7,21 +7,21 @@ type LoginPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const featureCards = [
+const roleCards = [
   {
-    title: "Diseno tactil",
-    description: "Controles amplios y lectura clara para tablets en piso, barra y caja.",
-    icon: TabletSmartphone
+    title: "Gerencia",
+    description: "Ventas, usuarios, caja y seguimiento general desde una sola vista.",
+    icon: BriefcaseBusiness
   },
   {
-    title: "Acceso seguro",
-    description: "Sesion centralizada en Supabase con base lista para perfiles y permisos.",
-    icon: ShieldCheck
+    title: "Capitanes y meseros",
+    description: "Acceso rapido para piso, mesas, servicio y cobro sin pasos innecesarios.",
+    icon: UsersRound
   },
   {
-    title: "Operacion conectada",
-    description: "La VM local ya expone app, auth y Studio sobre la red del negocio.",
-    icon: Wifi
+    title: "Caja",
+    description: "Interfaz directa para apertura, cierre y control operativo del turno.",
+    icon: WalletCards
   }
 ];
 
@@ -40,73 +40,91 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const error = Array.isArray(errorParam) ? errorParam[0] : errorParam;
 
   return (
-    <main className="min-h-screen bg-canvas bg-grain text-ink">
-      <div className="mx-auto flex min-h-screen max-w-[1600px] flex-col gap-6 px-4 py-4 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:px-6">
-        <section className="relative overflow-hidden rounded-[34px] border border-white/60 bg-ink px-6 py-8 text-cloud shadow-panel lg:px-10 lg:py-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.12),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(138,176,142,0.18),transparent_30%)]" />
-          <div className="relative flex h-full flex-col">
+    <main className="min-h-screen bg-[linear-gradient(180deg,#f6f1e8_0%,#efe7da_100%)] text-ink">
+      <div className="mx-auto flex min-h-screen max-w-[1480px] flex-col gap-5 px-4 py-4 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:px-6">
+        <section className="rounded-[32px] border border-stone-200/80 bg-[#f8f4ec] p-6 shadow-[0_18px_60px_rgba(67,56,39,0.08)] lg:p-8">
+          <div className="flex h-full flex-col">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cloud text-ink">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ink text-cloud">
                 <ChefHat className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.28em] text-cloud/55">Restaurant OS</p>
+                <p className="text-xs uppercase tracking-[0.28em] text-ink/45">Acceso operativo</p>
                 <h1 className="font-semibold">ZiiiPos</h1>
               </div>
             </div>
 
-            <div className="mt-12 max-w-xl lg:mt-16">
-              <p className="text-xs uppercase tracking-[0.32em] text-cloud/55">Produccion local</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight lg:text-6xl">Login operativo listo para tablet e iPad.</h2>
-              <p className="mt-5 max-w-lg text-base text-cloud/72 lg:text-lg">
-                La infraestructura ya vive en la VM. Ahora el acceso del equipo entra por una interfaz limpia, rapida y preparada para sesiones reales.
+            <div className="mt-10 rounded-[28px] bg-[#1f1b16] px-6 py-7 text-cloud">
+              <p className="text-xs uppercase tracking-[0.3em] text-cloud/55">Login</p>
+              <h2 className="mt-3 max-w-md text-3xl font-semibold tracking-tight lg:text-5xl">
+                Entrada simple para una operacion que no puede perder tiempo.
+              </h2>
+              <p className="mt-4 max-w-md text-sm leading-6 text-cloud/70 lg:text-base">
+                Disenado para gerencia, capitanes, meseros y caja. Menos adorno, mas velocidad, lectura clara y acceso inmediato.
               </p>
             </div>
 
-            <div className="mt-10 grid gap-4 md:grid-cols-3 lg:mt-auto lg:grid-cols-1 xl:grid-cols-3">
-              {featureCards.map(({ title, description, icon: Icon }) => (
-                <article key={title} className="rounded-[26px] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cloud/10 text-cloud">
+            <div className="mt-5 grid gap-3">
+              {roleCards.map(({ title, description, icon: Icon }) => (
+                <article key={title} className="flex items-start gap-4 rounded-[24px] border border-stone-200 bg-white px-5 py-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#efe5d5] text-[#7a4c17]">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-cloud/68">{description}</p>
+                  <div>
+                    <h3 className="text-base font-semibold text-ink">{title}</h3>
+                    <p className="mt-1 text-sm leading-6 text-ink/60">{description}</p>
+                  </div>
                 </article>
               ))}
+            </div>
+
+            <div className="mt-5 grid gap-3 rounded-[24px] border border-stone-200 bg-white px-5 py-4 text-sm text-ink/65 md:grid-cols-2 lg:mt-auto">
+              <div>
+                <p className="font-semibold text-ink">Seguridad activa</p>
+                <p className="mt-1">Sesion centralizada con Supabase y base lista para permisos por rol.</p>
+              </div>
+              <div>
+                <p className="font-semibold text-ink">Listo para tablets</p>
+                <p className="mt-1">Campos amplios, contraste alto y recorrido corto para entrar rapido.</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="flex items-center justify-center rounded-[34px] border border-white/60 bg-cloud/85 p-4 shadow-panel backdrop-blur lg:p-8">
-          <div className="w-full max-w-[560px] rounded-[30px] border border-ink/10 bg-white/88 p-6 shadow-sm lg:p-8">
-            <div className="flex items-start justify-between gap-4">
+        <section className="flex items-center justify-center rounded-[32px] border border-stone-200/80 bg-white/82 p-4 shadow-[0_18px_60px_rgba(67,56,39,0.08)] backdrop-blur lg:p-8">
+          <div className="w-full max-w-[620px] rounded-[30px] border border-stone-200 bg-[#fffdfa] p-6 lg:p-8">
+            <div className="flex flex-col gap-4 border-b border-stone-200 pb-5 lg:flex-row lg:items-start lg:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.28em] text-ink/45">Control de acceso</p>
-                <h3 className="mt-2 text-3xl font-semibold tracking-tight">Iniciar sesion</h3>
+                <h3 className="mt-2 text-3xl font-semibold tracking-tight">Entrar al sistema</h3>
+                <p className="mt-3 max-w-xl text-sm leading-6 text-ink/62 lg:text-base">
+                  Usa tu cuenta de trabajo para abrir tu vista segun el rol. Sin panel promocional, sin pasos extra y sin ruido visual.
+                </p>
               </div>
-              <div className="rounded-2xl border border-ink/10 bg-canvas/80 px-4 py-3 text-right text-sm">
-                <p className="text-ink/45">Canal</p>
-                <p className="mt-1 font-semibold">VM Local</p>
+              <div className="grid shrink-0 grid-cols-2 gap-3 text-sm lg:w-[220px] lg:grid-cols-1">
+                <div className="rounded-2xl border border-stone-200 bg-[#f6f1e8] px-4 py-3">
+                  <p className="text-ink/45">Canal</p>
+                  <p className="mt-1 font-semibold text-ink">VM Local</p>
+                </div>
+                <div className="rounded-2xl border border-stone-200 bg-[#f6f1e8] px-4 py-3">
+                  <p className="text-ink/45">Acceso</p>
+                  <div className="mt-1 flex items-center gap-2 font-semibold text-ink">
+                    <ShieldCheck className="h-4 w-4 text-emerald-700" />
+                    <span>Seguro</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <p className="mt-4 text-sm leading-6 text-ink/65 lg:text-base">
-              Usa una cuenta creada en Supabase Auth. Este acceso servira como base para permisos por rol, sesiones de caja y trazabilidad operativa.
-            </p>
+            <div className="mt-6 rounded-[24px] border border-stone-200 bg-[#f7f3eb] px-5 py-4 text-sm text-ink/62">
+              <p className="font-semibold text-ink">Pensado para el equipo</p>
+              <p className="mt-1 leading-6">
+                Gerencia entra a control, capitanes a operacion, meseros a servicio y caja a turno. El sistema decide la ruta segun permisos.
+              </p>
+            </div>
 
-            <div className="mt-8">
+            <div className="mt-6">
               <LoginForm error={error} />
-            </div>
-
-            <div className="mt-8 grid gap-3 rounded-[24px] bg-canvas/70 p-4 text-sm text-ink/60 md:grid-cols-2">
-              <div>
-                <p className="font-semibold text-ink">Ideal para piso y caja</p>
-                <p className="mt-1">Tap targets amplios y lectura estable en 10 a 13 pulgadas.</p>
-              </div>
-              <div>
-                <p className="font-semibold text-ink">Siguiente capa natural</p>
-                <p className="mt-1">Roles, apertura de turno, usuarios reales y permisos por modulo.</p>
-              </div>
             </div>
           </div>
         </section>
